@@ -1,0 +1,22 @@
+
+htable.c: In function ‘htable_print’:
+htable.c:75:35: warning: unused parameter ‘stream’ [-Wunused-parameter]
+void htable_print(htable h, FILE *stream) {
+~~~~~~^~~~~~
+htable.c: In function ‘htable_print_entire_table’:
+htable.c:89:29: warning: unknown escape sequence: '\%'
+fprintf(stdout, "\%5d \%5d \%5d   \%s\n",
+^~~~~~~~~~~~~~~~~~~~~~~~
+htable.c:89:29: warning: unknown escape sequence: '\%'
+htable.c:89:29: warning: unknown escape sequence: '\%'
+htable.c:89:29: warning: unknown escape sequence: '\%'
+htable.c:89:43: warning: format ‘%d’ expects argument of type ‘int’, but argument 5 has type ‘int *’ [-Wformat=]
+fprintf(stdout, "\%5d \%5d \%5d   \%s\n",
+~~~^
+\%5ls
+htable.c:92:21:
+h-> stats,
+~~~~~~~~~              
+htable.c: In function ‘htable_search’:
+htable.c:108:79: warning: comparison of integer expressions of different signedness: ‘unsigned int’ and ‘int’ [-Wsign-compare]
+while(h->keys[index] != NULL && strcmp(str, h->keys[index]) != 0 && index != h->capacity) {
