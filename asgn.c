@@ -1,3 +1,30 @@
+/* asgn.c - 9/16/19.
+ * COSC242 Group Assignment.
+ * 
+ * A program which fills a hash table with words read from STDIN, 
+ * using either linear probing or double hashing. During the filling 
+ * of the hash table statistics on the number of collisions that occured are
+ * recorded for each state of the hash table. If the -c parameter is passed
+ * it is able to be used as a spell checker for a given document. Information 
+ * on the number of unknown words in the document is printed, as well as 
+ * the unknown words themselves. The time taken to fill the hash table and 
+ * search it are also printed.
+ * 
+ * The program accepts a number of command line arguments:
+ * -c 'filename' - Checks the spelling of words in 'filename' using words read
+ *                 from stdin as the dictionary. -p is ignored. 
+ * -d            - Use double hashing as the collision resolution strategy
+ *                 (linear probing is the default).
+ * -e            - Write the entire contents of the hash table to stderr.
+ * -p            - Print stats information collected during the filling of
+ *                 the hash table.
+ * -s            - Display up to a given number of stats snapshots when given
+ *                 -p as an argument.
+ * -t tablesize  - Use the first prime >= tablesize as the size of 
+ *                 the hash table.
+ * -h            - Print a help message.
+ */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -5,7 +32,6 @@
 #include <time.h>
 #include "htable.h"
 #include "mylib.h"
-
 
 int main(int argc, char* argv[]) {
     htable dictionary;
@@ -32,7 +58,7 @@ int main(int argc, char* argv[]) {
                 filename = optarg;
                 break;
             case 'd':
-                hashing_method = DOUBLE_H; /*double check*/
+                hashing_method = DOUBLE_H;
                 break;
             case 'e':
                 e_flag = true;
@@ -51,8 +77,8 @@ int main(int argc, char* argv[]) {
                 h_flag = true;
                 break;
             default: 
-                printf("Unknown input: -%c %s", option, optarg);
-                return 1;
+                h_flag = true;
+                break;
         }
     }
     /*with the printing we have formated it like this to avoid the style
@@ -140,6 +166,5 @@ int main(int argc, char* argv[]) {
 
     htable_free(dictionary);
    
-
     return EXIT_SUCCESS;
 }

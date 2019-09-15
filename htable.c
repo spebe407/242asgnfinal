@@ -1,3 +1,8 @@
+/* htable.c - 9/16/19.
+ * COSC242 Group Assignment.
+ * 
+ * File containing functions for creating and using a hash table.
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -5,14 +10,23 @@
 #include "mylib.h"
 
 struct htablerec {
-    int capacity;
-    int num_keys;
-    int* frequencies;
-    char** keys;
-    int* stats;
-    hashing_t method;
+    int capacity;       /*The capacity of the hash table.*/
+    int num_keys;       /*The number of keys currently in the hash table.*/ 
+    int* frequencies;   /*An array containing the frequency of each key.*/
+    char** keys;        /*The keys contained in the hash table.*/
+    int* stats;         /*An array containing stats about the state of the hash table.*/
+    hashing_t method;   /*The type of collision resolution to use in the 
+                         *filling and search of the hash table.*/
 };
 
+/*
+ * Converts a string into an unsigned int so that it
+ * can be used in hashing calculations.
+ * 
+ * @param word - the string to convert to an unsigned int.
+ * 
+ * @return - the string as an unsigned int.
+ */
 static unsigned int htable_word_to_int(char *word) {
     unsigned int result = 0;
     
@@ -23,11 +37,27 @@ static unsigned int htable_word_to_int(char *word) {
     return result;
 }
 
+/*
+ * Calculates a step to use in double hashing collision resolution.
+ * This function is used by htable_insert and htable_search if
+ * DOUBLE_H is passed to htable_new.
+ * 
+ * @param h - the hash table that the key is to be inserted into.
+ * @param i_key - the integer representation of the key to be inserted.
+ * 
+ * @return - an unsigned int that is the step to be used in the double hashing
+ *           collision resolution calculations. 
+ */
 static unsigned int htable_step(htable h, unsigned int i_key) {
     unsigned int result = 1 + (i_key % (h->capacity - 1));
     return result;
 }
 
+/*
+ * Frees memory created during the creation of a new hash table.
+ * 
+ * @param h the htable to free.
+ */
 void htable_free(htable h) {
     int i;
     for(i = 0; i < h->capacity; i++) {
@@ -42,7 +72,26 @@ void htable_free(htable h) {
     free(h);
 }
 
-
+/*
+ * Insert a given string into a hash table, using linear probing or 
+ * double hashing as the collision resolution method. This function also 
+ * increments the strings matching frequency in h->freqs, and sets 
+ * h->stats[h->num_keys] to the number of collisions that occured while
+ * inserting the string. 
+ * 
+ * Returns 1 if the string is inserted and is the first instance 
+ * of that string in the hash table, the frequency of the matching string 
+ * is returned if it is not the first instance. 0 is returned if 
+ * the string is not inserted due to the hash table being full.
+ * 
+ * @param h - the hash table to insert the string into.
+ * @param str - the string to insert.
+ * 
+ * @return - 1 if the string is the first instance of
+ *             the string in the hash table, the frequency of the 
+ *             matching string in the hash table if is not. 0 is returned
+ *             if the hash table is full and the string was not inserted.
+ */
 int htable_insert(htable h, char *str) {
     int collisions = 0;
     unsigned int key = htable_word_to_int(str);
@@ -54,7 +103,7 @@ int htable_insert(htable h, char *str) {
         
 
         if(index == (key % h->capacity)) {
-            return 00000000000;
+            return 0;
         }
 
         collisions++;
@@ -77,6 +126,15 @@ int htable_insert(htable h, char *str) {
     }
 }
 
+/*
+ * Create a new empty hash table, using either linear probing or double hashing 
+ * collision resolution. 
+ * Note: The hashing type provided will dictate the collision resolution method 
+ * used in htable_search & htable_insert.
+ * 
+ * @param capacity - the size of the hash table to create.
+ * @param h_type - the collision resolution method to use.
+ */
 htable htable_new(int capacity, hashing_t h_type) {
     int i;
     htable result = emalloc(sizeof *result);
@@ -97,6 +155,12 @@ htable htable_new(int capacity, hashing_t h_type) {
     return result;
 }
 
+/*
+ * Prints a hash table to a given steam.
+ * 
+ * @param h - the hash table.
+ * @param stream - the stream to print to.
+ */
 void htable_print(htable h, FILE *stream) {
     int i;
     for(i = 0; i < h->capacity; i++) {
@@ -106,7 +170,14 @@ void htable_print(htable h, FILE *stream) {
     }
 }
 
-
+/*
+ * Prints out the entire contents of a hash table
+ * to stderr, including each key's position in the hash table,
+ * it's frequency, and it's stats.
+ * Note: Empty keys will not be printed.
+ * 
+ * @param h - the hash table to print.
+ */
 void htable_print_entire_table(htable h) {
     int count = 0;
 
@@ -128,8 +199,13 @@ void htable_print_entire_table(htable h) {
     }
 }
 
-                
-
+/*
+ * Searches a given hash table for a string using either linear probing
+ * or double hashing.
+ * 
+ * @param h - the hash table.
+ * @param str - the string to search for.
+ */
 int htable_search(htable h, char *str) {
     int collisions = 0;
     unsigned int key = htable_word_to_int(str);
