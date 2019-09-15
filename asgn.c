@@ -81,11 +81,6 @@ int main(int argc, char* argv[]) {
                 break;
         }
     }
-    /*with the printing we have formated it like this to avoid the style
-    * check where no lines can be longer than 80 char to avoid wrapping
-    * it is not the neatest looking print statements but it is inline with
-    * the rules. -MOVE TO REPORT 
-    */
 
     if(h_flag) {
         fprintf(stderr,
