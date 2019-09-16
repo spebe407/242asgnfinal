@@ -46,7 +46,11 @@ int main(int argc, char* argv[]) {
     hashing_t hashing_method = LINEAR_P;
     int table_size = 113;
 
-    bool c_flag, e_flag, p_flag, s_flag, h_flag = false;
+    bool c_flag = false;
+    bool e_flag = false;
+    bool p_flag = false;
+    bool s_flag = false;
+    bool h_flag = false;
 
     int snapshots = 0;
     int length = 0;
