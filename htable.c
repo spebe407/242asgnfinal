@@ -54,7 +54,7 @@ static unsigned int htable_step(htable h, unsigned int i_key) {
 }
 
 /*
- * Frees memory created during the creation of a new hash table.
+ * Frees memory allocated during the creation of a new hash table.
  * 
  * @param h the htable to free.
  */
@@ -156,7 +156,7 @@ htable htable_new(int capacity, hashing_t h_type) {
 }
 
 /*
- * Prints a hash table to a given steam.
+ * Prints a hash table to a given stream.
  * 
  * @param h - the hash table.
  * @param stream - the stream to print to.
@@ -173,7 +173,7 @@ void htable_print(htable h, FILE *stream) {
 /*
  * Prints out the entire contents of a hash table
  * to stderr, including each key's position in the hash table,
- * it's frequency, and it's stats.
+ * its frequency, and its stats.
  * Note: Empty keys will not be printed.
  * 
  * @param h - the hash table to print.
@@ -290,6 +290,5 @@ void htable_print_stats(htable h, FILE *stream, int num_stats) {
     for (i = 1; i <= num_stats; i++) {
         print_stats_line(h, stream, 100 * i / num_stats);
     }
-    fprintf(stream, "------------------------------------------------------\n\n"
-            );
+    fprintf(stream, "------------------------------------------------------\n\n");
 }
